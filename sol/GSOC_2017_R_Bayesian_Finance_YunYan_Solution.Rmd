@@ -185,10 +185,10 @@ istanbul_res <- extract(istanbul_model)
 # default: plot(istanbul_model, pars=c('beta'))
 beta_mat <- istanbul_res$beta
 colnames(beta_mat) <- colnames(X_train)
-beta_report <- apply(beta_mat, 2, function(c) quantile(c, prob=c(0.05, 0.1, 
+beta_report <- apply(beta_mat, 2, function(c) quantile(c, prob=c(0.025, 0.1, 
                                                                  0.5, 
-                                                                 0.9, 0.95)))
-# [0.1, 0.9]: 80% CI_level; [0.05, 0.95]: 95% outer_level
+                                                                 0.9, 0.975)))
+# [0.1, 0.9]: 80% CI_level; [0.025, 0.975]: 95% outer_level
 rownames(beta_report) <- c('ll', 'l', 'm', 'h', 'hh')
 figdf <- t(beta_report) %>% as.data.frame()
 figdf$VAR <- factor(rownames(figdf), levels = rownames(figdf))
