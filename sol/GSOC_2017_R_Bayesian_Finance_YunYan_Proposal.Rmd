@@ -2,15 +2,15 @@
 title: "Bayesian Hierarchical Models in Finance"
 author: "Yun Yan (<yy1533@nyu.edu>)"
 output:
-  word_document:
-    fig_caption: yes
+  html_document:
+    number_sections: yes
     toc: yes
   pdf_document:
     fig_caption: yes
     number_sections: yes
     toc: yes
-  html_document:
-    number_sections: yes
+  word_document:
+    fig_caption: yes
     toc: yes
 bibliography: myref.bib
 ---
@@ -91,12 +91,12 @@ The project is about implementing RStan solutions for reproducing finance resear
 
 I have already found two related research papers:
 
-1. Greyserman, A., Jones, D. H. & Strawderman, W. E. Portfolio selection using hierarchical Bayesian analysis and MCMC methods. J. Bank. Financ. 30, 669–678 (2006).
-2. Avramov, D. & Zhou, G. Bayesian Portfolio Analysis. Annu. Rev. Financ. Econ. 2, 25–47 (2010).
+1. Avramov, D. & Zhou, G. Bayesian Portfolio Analysis. Annu. Rev. Financ. Econ. 2, 25–47 (2010).
+2. Greyserman, A., Jones, D. H. & Strawderman, W. E. Portfolio selection using hierarchical Bayesian analysis and MCMC methods. J. Bank. Financ. 30, 669–678 (2006)
 
 First one is good review paper for me to know the overall research interest since it is published on Annual Review of Financial Economics.
 
-Second one is good candidate paper that I can give a try to reproduce, because its essence is to highlight the advantage of Bayesian hierarchical models in finance, in particular portfolio selection.
+Second one is good candidate paper that I can give a try to reproduce, because its essence is to highlight the advantage of Bayesian hierarchical models in finance, in particular portfolio selection. I still look forward to discussing with mentor to see whether the paper I chose fits for project.
 
 I need more help from mentors about choosing appropriate paper along these months: two are straightforward for repeating, and last one is worthwhile to go beyond the original hypothesis of the paper and try some novel analysis.
 
@@ -104,13 +104,13 @@ I need more help from mentors about choosing appropriate paper along these month
 
 ## Pre-coding 
 
-- 5/04 ~ 5/09: setup GitHub and communication tools, e.g. Skype, Slack;
+- 5/04 ~ 5/09: setup GitHub and communication tools, e.g. Skype, Slack; Also discuss choosing the possible first paper to be reproduced; 
 - 5/10 ~ 5/17: My final exam season at New York University;
-- 5/18 ~ 5/30: Reading the review paper ([@Greyserman2006]);
+- 5/18 ~ 5/30: Read the review paper [@Avramov2010];
 
 ## Coding
 
-- 5/30 ~ 6/26: Working on the first paper that I selected ([@Avramov2010]). It would takes ~1 month since it is a starting period.
+- 5/30 ~ 6/26: Working on the first paper that I selected [@Greyserman2006] or the one after discussion with mentors. It would takes ~1 month since it is a starting period for us.
 - 6/26 ~ 6/30: Evaluation and discuss with mentor to choose second paper, and third if possible. I might come up with my own choice after the first month experience.
 - 7/01 ~ 7/21: Working on second paper. And consider choosing final paper.
 - 7/22 ~ 8/21: Working on third paper which is expected to be most difficult as it involves in extending hypothesis.
