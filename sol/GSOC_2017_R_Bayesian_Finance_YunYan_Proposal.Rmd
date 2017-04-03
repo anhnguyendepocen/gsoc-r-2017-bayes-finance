@@ -1,0 +1,350 @@
+---
+title: "Bayesian Hierarchical Models in Finance"
+author: "Yun Yan (<yy1533@nyu.edu>)"
+output:
+  word_document:
+    fig_caption: yes
+    toc: yes
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+bibliography: myref.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = F, warning = F, message = F)
+```
+
+The proposal can be also accessed at <https://puriney.github.io/gsoc-r-2017-bayes-finance/yy_proposal.html> which has same content as this Google doc.
+
+My GitHub repository for this project has already been set at <https://github.com/Puriney/gsoc-r-2017-bayes-finance>. It contains the Rmarkdown source codes for both proposal and solution, and it is going to host all the source codes for this project, and has the full track of my role in GSoC summer project. Status of the repository will be changed to public after the student application deadline (Apr 3).
+
+# PROJECT INFO
+
+**Project title**: Bayesian Hierarchical Models in Finance
+
+**Project short title** (30 characters): Implement R and RStan solutions to perform Bayesian hierarchical modeling with interest to reproduce the results of three or more financial research papers.
+
+**URL of project idea page**: <https://github.com/rstats-gsoc/gsoc2017/wiki/Bayesian-Hierarchical-Models-in-Finance>
+
+# BIO OF STUDENT
+
+<!--Provide a brief (text) biography, and why you think your background qualifies you for this project.-->
+
+- Yun has valid background in data science and machine learning. He is a 2nd-year graduate student majoring in Computer Science at New York University, where he took related graduate-level courses: foundation of data science, machine learning, algorithm and data structure, computer vision, big data analytic etc.
+- Yun has strong interest of pattern discovery for data, in particular in context of academic research. For example, since July 2016 Yun has been involved in researches at Institute for Computational Medicine of NYU. The research is about analyzing the single-cell RNA-seq data-set where rows are cells (samples) and columns are genes (features). Since this project is about research paper, his experience and personal passion for research push him to submit this specific application.
+- Another motivation is to have furthermore hands-on experience in Bayesian analysis. This is because recently there emerges a strong trend to apply Bayesian analysis in his research field, e.g. [BASiCS](https://github.com/catavallejos/BASiCS)(Bayesian Analysis of Single-Cell Sequencing Data). It is appealing to him. He is not satisfied at how to use the established R pipeline for performing Bayesian analysis, but furthermore he has a strong interest of getting hands wet -- figure out the actual implementation for solving real-world challenges. Reproducing the results of finance research paper using Bayesian models achieves a good combination of depth into Bayes and feasibility for implementation.
+- Yun is an active R user who has been participating in developing R package. For example, [ChIPseeker](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html), a Bioconductor package for bioinformatics analysis; [honfleuR](https://github.com/Puriney/honfleuR), an extension supporting object-oriented programming in R S4 methods for an existed R package to analyze single-cell sequencing data.
+- Yun has already finished the free-part of on-line course [Introduction to Portfolio Analysis in R](https://www.datacamp.com/courses/introduction-to-portfolio-analysis-in-r) at DataCamp in order to have basic ideas of portfolio analysis and possible common language about topic contexts with mentors.
+
+Therefore his strong interest for Bayesian analysis in academic research and 5-year experience in R language make him a self-motivated and competent participant for this project. 
+
+# CONTACT INFORMATION 
+
+Student name: Yun Yan
+
+Student postal address: 564 First Ave, Apt 11X, New York, NY, 10016
+
+Telephone(s): +1 917-756-3868
+
+Email(s): yy1533@nyu.edu (primary account); youryanyun@gmail.com (acount for sharing draft).
+
+## Student affiliation
+
+Institution: New York University
+
+Program: Master program, Computer Science, Tandon School of Engineering
+
+Stage of completion: 2015.09 - 2017.06. As F-1 student, I have OPT sponsored for participating in GSoC this summer.
+
+Contact to verify: Office of Global Services (OGS), 5 MetroTech Center, Room 259, Brooklyn, NY 11201. Tel: (646) 997-3805
+
+
+## Schedule Conflicts:
+
+Off-keyboards on Sundays, otherwise there is no time schedule conflicts. I am dedicated to GSoC this summer.
+
+# MENTORS
+
+## Mentor names
+
+- Brian Peterson (brian@braverock.com)
+- Michael Weylandt
+
+## Contact with Mentors
+
+No direct contact. The project idea list and the guide manual for research replication are self-explaining to help me grasp the goal of this project.
+
+# CODING PLANS AND METHODS
+
+The project is about implementing RStan solutions for reproducing finance research paper. In principle, the replication should follow the format and instruction (see [here](https://goo.gl/tRzyCP)) outlined by mentor:
+
+- Summarize the essence of the paper by giving the bullets;
+- Extract its core hypothesis;
+- Fetch, clean, and prepare data-set;
+- Code development for repeating the results;
+- Extend data analysis to conceive new hypothesis, and find appropriate data to valid new hypothesis.
+
+I have already found two related research papers:
+
+1. Greyserman, A., Jones, D. H. & Strawderman, W. E. Portfolio selection using hierarchical Bayesian analysis and MCMC methods. J. Bank. Financ. 30, 669–678 (2006).
+2. Avramov, D. & Zhou, G. Bayesian Portfolio Analysis. Annu. Rev. Financ. Econ. 2, 25–47 (2010).
+
+First one is good review paper for me to know the overall research interest since it is published on Annual Review of Financial Economics.
+
+Second one is good candidate paper that I can give a try to reproduce, because its essence is to highlight the advantage of Bayesian hierarchical models in finance, in particular portfolio selection.
+
+I need more help from mentors about choosing appropriate paper along these months: two are straightforward for repeating, and last one is worthwhile to go beyond the original hypothesis of the paper and try some novel analysis.
+
+# TIMELINE
+
+## Pre-coding 
+
+- 5/04 ~ 5/09: setup GitHub and communication tools, e.g. Skype, Slack;
+- 5/10 ~ 5/17: My final exam season at New York University;
+- 5/18 ~ 5/30: Reading the review paper ([@Greyserman2006]);
+
+## Coding
+
+- 5/30 ~ 6/26: Working on the first paper that I selected ([@Avramov2010]). It would takes ~1 month since it is a starting period.
+- 6/26 ~ 6/30: Evaluation and discuss with mentor to choose second paper, and third if possible. I might come up with my own choice after the first month experience.
+- 7/01 ~ 7/21: Working on second paper. And consider choosing final paper.
+- 7/22 ~ 8/21: Working on third paper which is expected to be most difficult as it involves in extending hypothesis.
+
+## Submission
+
+- 8/21 ~ 8/29: Final submission
+
+# MANAGEMENT OF CODING PROJECT
+
+- Code: GitHub repo <https://github.com/Puriney/gsoc-r-2017-bayes-finance>
+- Communication: Slack
+- Task assignment: Trello (<https://trello.com/>)
+
+# SOLUTION
+
+Solution was written in Rmarkdown and the compiled HTML file was deployed on GitHub: <https://puriney.github.io/gsoc-r-2017-bayes-finance/index.html>. The following results are same as displayed on website thus I would suggest visit the HTML page for better experience.
+
+I am going to apply Bayesian hierarchical models for solving following example problems as solutions to hopefully pass the project tests: multivariate regression.
+
+<!-- - Multivariate regression with groupings -->
+
+## Env Setup
+Before starts, here are the working environment setup and library dependencies. 
+
+```{r}
+library(rstan)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(readxl)
+library(scales)
+# library(hrbrthemes)
+# library(extrafont)
+theme_set(theme_minimal())
+# hrbrthemes::import_roboto_condensed()
+# tmp <- list.dirs(.libPaths(), recursive = F)
+# tmp <- file.path(tmp[grepl('hrbrthemes', tmp)][1], 'fonts'); extrafont::font_import(paths=tmp, prompt = F)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+```
+
+```{r}
+DIRDATA <- './data'
+DIRFIG  <- './fig'
+DIRSTAN <- './stan'
+DIRRES  <- './res'
+if (!dir.exists(DIRFIG)) {dir.create(DIRFIG)}
+if (!dir.exists(DIRDATA)) {dir.create(DIRDATA)}
+if (!dir.exists(DIRSTAN)) {dir.create(DIRSTAN)}
+if (!dir.exists(DIRRES)) {dir.create(DIRRES)}
+```
+
+## Perform multivariate regression on Istanbul Stock Exchange Dataset
+
+Import and pre-process the [stock data](https://archive.ics.uci.edu/ml/datasets/ISTANBUL+STOCK+EXCHANGE#) downloaded from UCI-ML database.
+
+```{r}
+## Fetch and reading stock data
+file_url <- 'https://archive.ics.uci.edu/ml/machine-learning-databases/00247/data_akbilgic.xlsx'
+file_path <- file.path(DIRDATA, 'istanbul.xlsx')
+download.file(url = file_url, 
+              destfile = file_path,
+              method = 'wget', quiet = T)
+istanbul <- read_excel(file_path, 
+                       skip = 1)
+colnames(istanbul)[2:3] <- c('ISE_TL', 'ISE_USD')
+print(head(istanbul))
+```
+
+```{r}
+## Scaled dataset
+istanbul2 <- dplyr::select(istanbul, -date, -ISE_TL) %>%
+  scale() %>% as.data.frame()
+```
+
+Typically, building linear model is straightforward by `lm` function.
+
+```{r}
+## Build classical linear model
+istanbul_lm <- lm(ISE_USD ~ ., data = istanbul2)
+summary(istanbul_lm)
+```
+
+Prepare data for running RStan.
+
+```{r}
+## Prepare data to Rstan
+set.seed(2017)
+is_trained <- sample.int(NROW(istanbul2), 
+                         size = round(.8 * NROW(istanbul2)),
+                         replace = FALSE)
+is_trained <- seq_len(NROW(istanbul2)) %in% is_trained
+df_train <- istanbul2[is_trained, ]         ## 80% for building model
+df_pred  <- istanbul2[!is_trained, ]        ## 20% for evaluting model
+X_train <- model.matrix(~., df_train[, -1]) ## intersect item is added
+y_train <- df_train$ISE_USD
+X_pred  <- model.matrix(~., df_pred[, -1])
+y_true  <- df_pred$ISE_USD
+
+n_train <- NROW(X_train)
+n_pred <- NROW(X_pred)
+n_ft <- NCOL(X_train)
+```
+
+
+Bayesian hierarchical model can be expressed by factor graph:
+
+![Factor graph](http://i.imgur.com/Zjke1zo.png)
+
+The same model is defined by Stan language: 
+
+```{r}
+stan_path <- file.path(DIRSTAN, 's01_lm.stan')
+```
+
+``` stan
+data {
+  int N;                // sample size of X
+  int M;                // sample size of the X_pred
+  int K;                // #features
+  vector[N] y;          // response
+  matrix[N,K] X;        // model matrix for training
+  matrix[M,K] X_pred;   // model matrix to be predicted
+}
+parameters {
+  vector[K] beta;       // regression associate
+  real sigma;           // random noise
+}
+transformed parameters {
+  vector[N] mu;
+  mu = X * beta;
+}
+model {
+  // hyperparameters
+  sigma ~ uniform(-10, 10);
+  beta ~ normal(0, 10);
+  // parameter
+  y ~ normal(mu, sigma);
+}
+generated quantities {
+  vector[M] y_pred;
+  y_pred = X_pred * beta;
+}
+// Reference: https://datascienceplus.com/bayesian-regression-with-stan-part-1-normal-regression/
+```
+
+Run RStan, and the resulted model is exported to RDS file (see `rds_path`). 
+
+```{r, error=F, message=FALSE, warning=F}
+## Run Rstan
+rds_path <- file.path(DIRRES, 'istanbul_bayes_lm.rds')
+if (file.exists(rds_path)){
+  istanbul_model <- read_rds(rds_path)
+} else{
+  istanbul_model <- stan(file = stan_path,
+                         data = list(N=n_train, M=n_pred, K=n_ft, 
+                                     y=y_train, X=X_train, X_pred=X_pred),
+                         pars = c("beta", "sigma", "y_pred"),
+                         iter = n_train / 2,
+                         algorithm = 'NUTS', seed=2017, verbose = FALSE)
+  write_rds(x = istanbul_model, path = rds_path)
+}
+```
+
+Report the posterior of the beta and sigma.
+
+```{r}
+## Report the estimated beta and sigma
+print(istanbul_model, c('beta', 'sigma'), prob=c(.1, .5, .9))
+```
+
+Better way is to visualize the posteriors of parameters. 
+```{r}
+istanbul_res <- extract(istanbul_model)
+```
+
+```{r}
+## Visualize the beta
+# default: plot(istanbul_model, pars=c('beta'))
+beta_mat <- istanbul_res$beta
+colnames(beta_mat) <- colnames(X_train)
+beta_report <- apply(beta_mat, 2, function(c) quantile(c, prob=c(0.025, 0.1, 
+                                                                 0.5, 
+                                                                 0.9, 0.975)))
+# [0.1, 0.9]: 80% CI_level; [0.025, 0.975]: 95% outer_level
+rownames(beta_report) <- c('ll', 'l', 'm', 'h', 'hh')
+figdf <- t(beta_report) %>% as.data.frame()
+figdf$VAR <- factor(rownames(figdf), levels = rownames(figdf))
+p <- ggplot(figdf, aes(x=VAR, y=m)) +
+  geom_linerange(aes(ymin = ll, ymax = hh)) +
+  geom_pointrange(aes(ymin=l, ymax=h), colour='red') +
+  labs(x="Feature Name", y="Coefficient Value", title = '', 
+       caption="Red: 80% CI Level; Black: 95% Outer Level") +
+  coord_flip()
+ggsave(filename = file.path(DIRFIG, 's01_beta.pdf'), p, width=8, height=6)
+print(p)
+```
+
+For the 20% data-set that are not used for building model, compare their predicted values with their observation in actual world. 
+
+```{r}
+## For the unseen dataset, compare the predited v.s. observed values
+y_pred_mat <- istanbul_res$y_pred
+y_pred_val <- apply(y_pred_mat, 2, median)
+```
+```{r}
+c <- cor.test(y_true, y_pred_val)
+print(c)
+```
+
+```{r}
+p <- qplot(y_true, y_pred_val, xlab='Observed', ylab='Predicted') +
+  coord_fixed() +
+  geom_abline(slope = 1, intercept = 0, color = 'red', linetype = 'dashed') +
+  geom_smooth(method='lm', se=FALSE) +
+  labs(title="Prediction v.s. observation", 
+       caption="Red dashed line: obs=pred; Blue line: linear regression fitted")
+print(p)
+ggsave(filename = file.path(DIRFIG, 's01_pred_obs.pdf'), p, 
+       width = 5, height = 5)
+```
+
+<!-- ## Perform multivariate regression with groups on Insurance Company Benchmark dataset
+
+```{r}
+file_url <- 'https://archive.ics.uci.edu/ml/datasets/Insurance+Company+Benchmark+%28COIL+2000%29'
+# multivariate regression with training and prediction
+```
+-->
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+
