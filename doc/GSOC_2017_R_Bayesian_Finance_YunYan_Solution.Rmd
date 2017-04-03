@@ -1,0 +1,241 @@
+---
+title: "Bayesian Hierarchical Models in Finance -- Solution for tests"
+author: "Yun Yan (<yy1533@nyu.edu>)"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  word_document:
+    fig_caption: yes
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = F, warning = F, message = F)
+```
+
+
+# Solution
+
+I am going to apply Bayesian hierarchical models for solving following example problems as solutions to hopefully pass the project tests: multivariate regression.
+
+<!-- - Multivariate regression with groupings -->
+
+## Env Setup
+Before starts, here are the working environment setup and library dependencies. 
+
+```{r}
+library(rstan)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(readxl)
+library(scales)
+# library(hrbrthemes)
+# library(extrafont)
+theme_set(theme_minimal())
+# hrbrthemes::import_roboto_condensed()
+# tmp <- list.dirs(.libPaths(), recursive = F)
+# tmp <- file.path(tmp[grepl('hrbrthemes', tmp)][1], 'fonts'); extrafont::font_import(paths=tmp, prompt = F)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+```
+
+```{r}
+DIRDATA <- './data'
+DIRFIG  <- './fig'
+DIRSTAN <- './stan'
+DIRRES  <- './res'
+if (!dir.exists(DIRFIG)) {dir.create(DIRFIG)}
+if (!dir.exists(DIRDATA)) {dir.create(DIRDATA)}
+if (!dir.exists(DIRSTAN)) {dir.create(DIRSTAN)}
+if (!dir.exists(DIRRES)) {dir.create(DIRRES)}
+```
+
+## Perform multivariate regression on Istanbul Stock Exchange Dataset
+
+Import and pre-process the [stock data](https://archive.ics.uci.edu/ml/datasets/ISTANBUL+STOCK+EXCHANGE#) downloaded from UCI-ML database.
+
+```{r}
+## Fetch and reading stock data
+file_url <- 'https://archive.ics.uci.edu/ml/machine-learning-databases/00247/data_akbilgic.xlsx'
+file_path <- file.path(DIRDATA, 'istanbul.xlsx')
+download.file(url = file_url, 
+              destfile = file_path,
+              method = 'wget', quiet = T)
+istanbul <- read_excel(file_path, 
+                       skip = 1)
+colnames(istanbul)[2:3] <- c('ISE_TL', 'ISE_USD')
+print(head(istanbul))
+```
+
+```{r}
+## Scaled dataset
+istanbul2 <- dplyr::select(istanbul, -date, -ISE_TL) %>%
+  scale() %>% as.data.frame()
+```
+
+Typically, building linear model is straightforward by `lm` function.
+
+```{r}
+## Build classical linear model
+istanbul_lm <- lm(ISE_USD ~ ., data = istanbul2)
+summary(istanbul_lm)
+```
+
+Prepare data for running RStan.
+
+```{r}
+## Prepare data to Rstan
+set.seed(2017)
+is_trained <- sample.int(NROW(istanbul2), 
+                         size = round(.8 * NROW(istanbul2)),
+                         replace = FALSE)
+is_trained <- seq_len(NROW(istanbul2)) %in% is_trained
+df_train <- istanbul2[is_trained, ]         ## 80% for building model
+df_pred  <- istanbul2[!is_trained, ]        ## 20% for evaluting model
+X_train <- model.matrix(~., df_train[, -1]) ## intersect item is added
+y_train <- df_train$ISE_USD
+X_pred  <- model.matrix(~., df_pred[, -1])
+y_true  <- df_pred$ISE_USD
+
+n_train <- NROW(X_train)
+n_pred <- NROW(X_pred)
+n_ft <- NCOL(X_train)
+```
+
+
+Bayesian hierarchical model can be expressed by factor graph:
+
+![Factor graph](http://i.imgur.com/Zjke1zo.png)
+
+The same model is defined by Stan language: 
+
+```{r}
+stan_path <- file.path(DIRSTAN, 's01_lm.stan')
+```
+
+``` stan
+data {
+  int N;                // sample size of X
+  int M;                // sample size of the X_pred
+  int K;                // #features
+  vector[N] y;          // response
+  matrix[N,K] X;        // model matrix for training
+  matrix[M,K] X_pred;   // model matrix to be predicted
+}
+parameters {
+  vector[K] beta;       // regression associate
+  real sigma;           // random noise
+}
+transformed parameters {
+  vector[N] mu;
+  mu = X * beta;
+}
+model {
+  // hyperparameters
+  sigma ~ uniform(-10, 10);
+  beta ~ normal(0, 10);
+  // parameter
+  y ~ normal(mu, sigma);
+}
+generated quantities {
+  vector[M] y_pred;
+  y_pred = X_pred * beta;
+}
+// Reference: https://datascienceplus.com/bayesian-regression-with-stan-part-1-normal-regression/
+```
+
+Run RStan, and the resulted model is exported to RDS file (see `rds_path`). 
+
+```{r, error=F, message=FALSE, warning=F}
+## Run Rstan
+rds_path <- file.path(DIRRES, 'istanbul_bayes_lm.rds')
+if (file.exists(rds_path)){
+  istanbul_model <- read_rds(rds_path)
+} else{
+  istanbul_model <- stan(file = stan_path,
+                         data = list(N=n_train, M=n_pred, K=n_ft, 
+                                     y=y_train, X=X_train, X_pred=X_pred),
+                         pars = c("beta", "sigma", "y_pred"),
+                         iter = n_train / 2,
+                         algorithm = 'NUTS', seed=2017, verbose = FALSE)
+  write_rds(x = istanbul_model, path = rds_path)
+}
+```
+
+Report the posterior of the beta and sigma.
+
+```{r}
+## Report the estimated beta and sigma
+print(istanbul_model, c('beta', 'sigma'), prob=c(.1, .5, .9))
+```
+
+Better way is to visualize the posteriors of parameters. 
+```{r}
+istanbul_res <- extract(istanbul_model)
+```
+
+```{r}
+## Visualize the beta
+# default: plot(istanbul_model, pars=c('beta'))
+beta_mat <- istanbul_res$beta
+colnames(beta_mat) <- colnames(X_train)
+beta_report <- apply(beta_mat, 2, function(c) quantile(c, prob=c(0.05, 0.1, 
+                                                                 0.5, 
+                                                                 0.9, 0.95)))
+# [0.1, 0.9]: 80% CI_level; [0.05, 0.95]: 95% outer_level
+rownames(beta_report) <- c('ll', 'l', 'm', 'h', 'hh')
+figdf <- t(beta_report) %>% as.data.frame()
+figdf$VAR <- factor(rownames(figdf), levels = rownames(figdf))
+p <- ggplot(figdf, aes(x=VAR, y=m)) +
+  geom_linerange(aes(ymin = ll, ymax = hh)) +
+  geom_pointrange(aes(ymin=l, ymax=h), colour='red') +
+  labs(x="Feature Name", y="Coefficient Value", title = '', 
+       caption="Red: 80% CI Level; Black: 95% Outer Level") +
+  coord_flip()
+ggsave(filename = file.path(DIRFIG, 's01_beta.pdf'), p, width=8, height=6)
+print(p)
+```
+
+For the 20% dataset that are not used for building model, compare their predicted values with their observation in actual world. 
+
+```{r}
+## For the unseen dataset, compare the predited v.s. observed values
+y_pred_mat <- istanbul_res$y_pred
+y_pred_val <- apply(y_pred_mat, 2, median)
+```
+```{r}
+c <- cor.test(y_true, y_pred_val)
+print(c)
+```
+
+```{r}
+p <- qplot(y_true, y_pred_val, xlab='Observed', ylab='Predicted') +
+  coord_fixed() +
+  geom_abline(slope = 1, intercept = 0, color = 'red', linetype = 'dashed') +
+  geom_smooth(method='lm', se=FALSE) +
+  labs(title="Prediction v.s. observation", 
+       caption="Red dashed line: obs=pred; Blue line: linear regression fitted")
+print(p)
+ggsave(filename = file.path(DIRFIG, 's01_pred_obs.pdf'), p, 
+       width = 5, height = 5)
+```
+
+<!-- ## Perform multivariate regression with groups on Insurance Company Benchmark dataset
+
+```{r}
+file_url <- 'https://archive.ics.uci.edu/ml/datasets/Insurance+Company+Benchmark+%28COIL+2000%29'
+# multivariate regression with training and prediction
+```
+-->
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
